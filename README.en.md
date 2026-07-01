@@ -6,13 +6,14 @@ An AI agent skill for CNKI (China National Knowledge Infrastructure) literature 
 
 ## What Problem This Solves
 
-CNKI's page state, login permissions, download entry points, result filtering, and human verification are all fairly sensitive. When graduate students search for literature manually, common issues include:
+CNKI's page state, login permissions, download entry points, result filtering, and human verification are all fairly sensitive. When graduate students search for literature manually, these are the concrete situations that keep coming up:
 
-- Keywords keep changing, and the results page/filter state becomes messy.
-- Source-tier filters, year windows, and download-count sorting require repetitive clicking, which is slow and error-prone.
-- High download counts do not mean the method fits, and a matching title does not mean the full text is actually usable.
-- Opening detail pages in bulk, confirming the PDF/CAJ download entry, and verifying that files actually downloaded takes a lot of time and effort.
-- Sloppy automated operations tend to trigger more verification challenges, ending up slower than doing it manually.
+- **Change one keyword and everything you already filtered gets reset.** Editing keywords in the results-page search box often wipes out the source-tier filter and sort order you already set, forcing you to redo them. This skill rebuilds the `kw=` parameter in the URL and navigates directly instead, so the filter state survives.
+- **Click through source tiers faster than the AJAX refresh can keep up.** Clicking CSSCI, then Peking University Core, then CSCD in quick succession often means the previous filter hasn't taken effect yet when the next click lands, and the numbers stop making sense. The skill waits for the result count (`#countPageDiv`) to stabilize after each click before moving to the next — verified live: clicking CSSCI took the result count from 1,412 straight down to 59, and the mechanism held.
+- **Try to filter by year and end up corrupting the search instead.** CNKI's custom year-range control is normally unreachable (it lives inside a hidden modal), and testing showed that triggering it corrupts the search into a blank "no data" state, requiring a page reload to recover. The skill never touches this control; year requirements are checked later by reading the year off the candidate list instead.
+- **Title and abstract look like a match, then the full text turns out to be something else.** For example, an abstract mentions "three parties," but the actual model turns out to be a two-party game where the third party is just an exogenous policy parameter — no download count or citation count will save you from that mismatch. The skill's full-text verification step specifically checks for this kind of setup, instead of picking papers by title alone.
+- **The download button moves around, and you can't always tell if the file is actually usable.** The PDF/CAJ entry point on the detail page isn't in a fixed spot, so manual clicks miss it, and what downloads isn't always a real, openable PDF. The skill clicks the fixed `a#pdfDown`/`a#cajDown` selectors and checks the file header against `%PDF` right after downloading, so a bad download is caught immediately.
+- **Rushing retries after a failure tends to trigger more verification, not less.** Clicking rapidly through filters in a short window tends to trigger CNKI's human-verification challenges or rate limiting, ending up slower than doing it by hand. The skill applies an explicit 3-try cap and stops to hand control back to the user instead of pushing harder.
 
 This skill's goal is not to bypass CNKI, but to standardize the manual workflow of "graduate student searching CNKI for literature": through a local browser CDP bridge, on the premise that the user is already logged in with legitimate download rights, it favors stable URLs, real page clicks, and explicit STOP rules — reducing repetitive labor, cutting down on mistaken or wasted attempts, and letting you focus your energy back on judging the papers themselves.
 
