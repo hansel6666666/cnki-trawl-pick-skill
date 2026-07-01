@@ -1,5 +1,7 @@
 # CNKI Trawl Pick Skill
 
+[English](./README.en.md)
+
 面向 CNKI/知网文献检索、筛选、授权下载与全文相关性核验的 AI Agent Skill。仓库同时提供 Codex 和 Claude Code 两个版本。
 
 ## 解决什么痛点
@@ -173,17 +175,21 @@ CNKI 下载必须进入单篇详情页。流程会优先确认详情页标题，
 ## 使用示例
 
 ```text
-Use cnki-trawl-pick to search CNKI for papers about "动力电池回收" and "三方演化博弈", limit to 2026-present, sort by downloads, download authorized PDFs, and verify method fit.
+使用 cnki-trawl-pick 检索 CNKI 上关于"动力电池回收"和"三方演化博弈"的论文，限定 2026 年至今，按下载量排序，下载有权限的 PDF，并核验方法是否贴合。
 ```
 
 ```text
-Use cnki-trawl-pick to find recent CSSCI or Peking University Core papers related to "新能源动力电池" and "演化博弈", then classify them as primary reference, supporting reference, or background only.
+使用 cnki-trawl-pick 查找近期 CSSCI 或北大核心中与"新能源动力电池"和"演化博弈"相关的论文，并将其分类为主参考、辅助参考或背景材料。
 ```
 
-## Limitations
+## 局限性
 
-- It depends on a working local browser/CDP bridge.
-- It does not replace CNKI access rights.
-- It does not bypass captcha or login.
-- It does not guarantee that CNKI has enough papers for a very narrow year/topic/source-tier combination.
-- It should stop and ask whether to broaden the search when strict conditions produce too few candidates.
+- 依赖本机可用的浏览器/CDP 桥接，桥接不可用时无法独立工作。
+- 不能替代 CNKI 的访问权限，没有权限就无法下载全文。
+- 不会绕过验证码或登录，遇到即停止并交给用户处理。
+- 不保证在非常窄的年份/主题/来源层次组合下，CNKI 一定有足够数量的论文。
+- 严格条件下候选数量过少时，应停止并询问用户是否放宽条件，而不是静默降低标准。
+
+## 许可 License
+
+本仓库不使用 MIT/Apache 等开源许可证。默认允许查看、克隆、下载并用于个人学习/评估用途；**修改、二次分发或用于其他已发布的项目/产品，需事先获得作者书面同意**。完整条款见 [LICENSE](./LICENSE)。
