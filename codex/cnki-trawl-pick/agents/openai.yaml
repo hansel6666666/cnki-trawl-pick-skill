@@ -1,0 +1,4 @@
+interface:
+  display_name: "CNKI Trawl Pick"
+  short_description: "CNKI search, screening, download, verification"
+  default_prompt: "Use $cnki-trawl-pick to find and verify high-relevance CNKI papers for my topic."
