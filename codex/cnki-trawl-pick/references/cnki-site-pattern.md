@@ -140,6 +140,6 @@ Rules:
 
 - Long or expired CNKI detail URLs may fail with `431` or `chrome-error://chromewebdata/`; refresh by exact-title search and open the current result-row link.
 - `/clickAt` on a background tab can use stale coordinates. `/download` already brings the tab to front internally.
-- Year filters such as `#txtStartYear`, `#txtEndYear`, and `#btnFilterYear` have been unstable with source-tier multi-selects. If year filtering fails three times, stop UI attempts and screen year/date from the result list.
+- Year filters (`#txtStartYear`, `#txtEndYear`, `#btnFilterYear`) live inside a hidden modal (`#modalBox`, `display:none`) with no discoverable click path from the results page (verified 2026-07-01). Forcing the modal open and submitting it corrupted the search state (dropped the academic-journal scope, page showed "暂无数据") both alone and combined with a source-tier filter — the failure is not specific to combining with source-tier filters, do not attempt this control at all. Screen year/date from the result list instead, as already done in the Rank Candidates step.
 - If total count remains below 10 after CSSCI, Peking University Core, CSCD, and EI plus a 5-year window, report low recall instead of lowering standards silently.
 - If 50 results show almost no method fit, change keywords or broaden to a higher-level concept. Do not expand to 100 as a substitute for relevance.

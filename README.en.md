@@ -89,11 +89,7 @@ Copy-Item -Recurse ".\claude\cnki-trawl-pick" "$env:USERPROFILE\.claude\skills\c
 
 ## Standard Workflow
 
-### Step 0: Login And Permission Check
-
-Open the CNKI homepage or a results page and check the login status in the top-right corner. You must confirm the user is logged in and that the current account or institution has download rights to the target literature. If there is no permission, stop — do not continue with search or download attempts that will not pay off.
-
-### Step 1: Define The Search Boundary
+### Step 0: Define The Search Boundary
 
 Clarify, based on the advisor's or project's requirements:
 
@@ -102,6 +98,10 @@ Clarify, based on the advisor's or project's requirements:
 - Year window, e.g. "recent 3 years," "2026 to present," "2020-2026."
 - Source tier, e.g. CSSCI, Peking University Core, CSCD, EI.
 - Whether PDFs/CAJs need to be downloaded, or only a candidate list is needed.
+
+### Step 1: Login And Permission Check
+
+Open the CNKI homepage or a results page and check the login status in the top-right corner. You must confirm the user is logged in and that the current account or institution has download rights to the target literature. If there is no permission, stop — do not continue with search or download attempts that will not pay off.
 
 ### Step 2: Search By URL First
 
@@ -145,10 +145,10 @@ CNKI downloads must go through the individual article's detail page. The workflo
 
 ### Step 6: Full-Text Verification
 
-Downloading does not mean usable. You must read the model construction, actor setup, replicator dynamics equations, equilibrium analysis, simulation, and conclusion sections to confirm:
+Downloading does not mean usable. You must read the core model/method sections — which sections these are depends on the paper's methodology; for example, an evolutionary-game paper typically has model construction, actor setup, replicator dynamics equations, equilibrium analysis, and simulation — to confirm:
 
-- Whether this is actually the method the user needs.
-- Whether the "third party" is genuinely an endogenous decision-making actor, not an exogenous parameter.
+- Whether this is actually the method the user needs, not just keyword-adjacent.
+- If the topic genuinely calls for a three-party evolutionary game, whether the "third party" is a real endogenous decision-making actor, not an exogenous parameter.
 - Whether the variables, actors, and scenario can transfer to the user's topic.
 - Whether the author's conclusions or limitations indicate the paper cannot serve as a primary reference.
 
@@ -166,7 +166,7 @@ The final output should include:
 
 - URL-first: reduces search-box failures, misfires, and non-reproducible results.
 - Controllable source tier: adapts to different advisor requirements for CSSCI, Peking University Core, CSCD, EI.
-- Controllable year window: supports recent 3 years, 5 years, a specific year to present, etc.
+- Best-effort year matching: CNKI's year-filter control is unreliable in practice (testing showed it can corrupt the search state), so the workflow screens years from the candidate list instead of fighting the UI year filter.
 - Screen before download: avoids downloading a pile of similarly-titled but method-mismatched papers.
 - Verify after download: requires reading the key method sections of the full text, avoiding "picking papers by title alone."
 - Explicit STOP rules: stops instead of forcing through when login, permission, captcha, or download failures hit the retry cap.
